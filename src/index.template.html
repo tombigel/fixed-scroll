@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Fixed scroll</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
+</head>
+
+<body>
+  <div id="root">
+    <div id="inner">
+      <div class="strip" id="strip-1" data-speed="0" data-effect="parallax">
+        <!-- https://static.wixstatic.com/media/feac6b9cf32640d3ac325c905f2b3786.jpg/v1/fill/w_600,h_400,al_c,q_80,usm_0.66_1.00_0.01/Sheep.jpg -->
+        <img class="bg"
+          src="https://static.wixstatic.com/media/feac6b9cf32640d3ac325c905f2b3786.jpg/v1/fill/w_1920,h_1066,al_c,q_80,usm_0.66_1.00_0.01/Sheep.jpg"
+          alt="">
+        <div class="content">
+          <p>Speed 0 => Normal</p>
+        </div>
+      </div>
+      <div class="strip" id="strip-2" data-speed="0.25" data-effect="parallax">
+        <img class="bg"
+          src="https://static.wixstatic.com/media/feac6b9cf32640d3ac325c905f2b3786.jpg/v1/fill/w_1920,h_1066,al_c,q_80,usm_0.66_1.00_0.01/Sheep.jpg"
+          alt="">
+        <div class="content">
+          <p>Speed 0.25 => Slow Parallax</p>
+        </div>
+      </div>
+      <div class="strip" id="strip-3" data-speed="0.5" data-effect="parallax">
+        <img class="bg"
+          src="https://static.wixstatic.com/media/feac6b9cf32640d3ac325c905f2b3786.jpg/v1/fill/w_1920,h_1066,al_c,q_80,usm_0.66_1.00_0.01/Sheep.jpg"
+          alt="">
+        <div class="content">
+          <p>Speed 0.5 => Parallax</p>
+          <div id="cube" class="cube" data-effect="slide-in" data-threshold="0.5" data-direction="right"></div>
+        </div>
+
+      </div>
+      <div class="strip" id="strip-4" data-speed="0.75" data-effect="parallax">
+        <img class="bg"
+          src="https://static.wixstatic.com/media/feac6b9cf32640d3ac325c905f2b3786.jpg/v1/fill/w_1920,h_1066,al_c,q_80,usm_0.66_1.00_0.01/Sheep.jpg"
+          alt="">
+        <div class="content">
+          <p>Speed 0.75 => Fast Parallax</p>
+        </div>
+      </div>
+      <div class="strip" id="strip-5" data-speed="1" data-effect="parallax">
+        <img class="bg"
+          src="https://static.wixstatic.com/media/feac6b9cf32640d3ac325c905f2b3786.jpg/v1/fill/w_1920,h_1066,al_c,q_80,usm_0.66_1.00_0.01/Sheep.jpg"
+          alt="">
+        <div class="content">
+          <p>Speed 1 => Reveal</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/3.1.1/gsap.min.js'></script>
+  <script src="./script.js"></script>
+
+</body>
+
+</html>
