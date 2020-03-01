@@ -43,6 +43,7 @@ class ScrubAnimations {
       // On resize measure window again
       window.addEventListener("resize", () => {
         this.windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
+        this.elementsWithEffectsMap = this.getElementsWithEffects();
         this.doOnNextRAF();
       });
       // Calculate and initialize scroll position
