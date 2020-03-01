@@ -1,0 +1,57 @@
+:root {
+  --strip-height: 100vh;
+}
+
+body {
+  height: calc(var(--strip-height) * 5);
+}
+
+#root {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#inner {
+  position: relative;
+  top: 0;
+}
+
+.strip {
+  position: relative;
+  display: grid;
+  grid-template: 100%/100%;
+  grid-template-areas: "strip";
+  text-align: center;
+  border-bottom: 1px solid #000;
+  height: var(--strip-height);
+  overflow: hidden;
+}
+.strip .bg {
+  grid-area: strip;
+  width: 100%;
+  height: 100vh;
+  min-height: var(--strip-height);
+  object-fit: cover;
+  z-index: 0;
+}
+.strip .content {
+  grid-area: strip;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.strip .content p {
+  padding: 2em;
+  margin: 0;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.cube {
+  width: 100px;
+  height: 100px;
+  background: red;
+}
+
+/*# sourceMappingURL=style.css.map */
