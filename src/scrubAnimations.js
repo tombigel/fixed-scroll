@@ -22,7 +22,7 @@ import { onReady, getWindowSize, getWindowScroll } from "./utils.js";
  */
 
 /**
- * Manage page animations and
+ * Manage page animations and throttle scroll
  * @param {HTMLElement} root The fixed element to use as a scroll parent
  */
 class ScrubAnimations {
