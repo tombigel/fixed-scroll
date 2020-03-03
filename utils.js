@@ -36,3 +36,11 @@ export function getWindowScroll() {
     x: window.pageXOffset
   };
 }
+
+/**
+ * Test if this is a mobile device (by useragent)
+ * @returns {Boolean}
+ */
+export function isMobile() {
+  return /Mobi|Android/i.test(navigator.userAgent)
+}

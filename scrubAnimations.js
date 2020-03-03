@@ -1,5 +1,5 @@
 import { getElementRect } from './domMeasurements.js';
-import { onReady, getWindowSize, getWindowScroll } from './utils.js';
+import { onReady, getWindowSize, getWindowScroll, isMobile } from './utils.js';
 
 /**
  * Window dimensions in pixels
@@ -58,8 +58,10 @@ class ScrubAnimations {
   init() {
     const windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
     this.elementsWithEffectsMap = this.getElementsWithEffects();
-    this.initDocument();
-    this.doScroll(windowScrollAndSize);
+    if (!isMobile()) {
+      this.initDocument();
+      this.doScroll(windowScrollAndSize);
+    }
     this.doOnNextRAF();
   }
 
@@ -104,7 +106,9 @@ class ScrubAnimations {
         // see this gist by Paul Irish: https://gist.github.com/paulirish/5d52fb081b3570c81e3a
         const windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
         // Scroll...
-        this.doScroll(windowScrollAndSize);
+        if (!isMobile()) {
+          this.doScroll(windowScrollAndSize);
+        }
         // ...then animate
         this.doAnimations(windowScrollAndSize);
         // Release debounce flag
