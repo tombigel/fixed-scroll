@@ -49,5 +49,16 @@
 .cube {
   width: 100px;
   height: 100px;
+}
+#cube1{
   background: red;
+}
+#cube2{
+  background: green;
+}
+#cube3{
+  background: blue;
+}
+#cube4{
+  background: magenta;
 }

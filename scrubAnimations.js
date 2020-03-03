@@ -147,16 +147,17 @@ class ScrubEffects {
          */
         case 'slide-in': {
           const { top, left, bottom, right, direction, threshold } = params;
-          switch (direction) {
-            case 'right': {
-              const distance = windowDimensions.width - right; // distance to travel
-              const end = windowDimensions.height * threshold; // the y position where element should be with translateX(0)
-              const current = windowDimensions.y + windowDimensions.height- top; // the current y position of the element
-              const progress = Math.min(current / end, 1) // the percent of the animation we should be in, normalized
-              element.style.transform = `translateX(${distance * (1 - progress)}px)`;
-              break;
-            }
-          }
+          const end = windowDimensions.height * threshold; // the y position where element should be with translateX(0)
+          const current = windowDimensions.y + windowDimensions.height- top; // the current y position of the element
+          const progress = Math.min(current / end, 1) // the percent of the animation we should be in, normalized
+          const transforms = {
+            top: `translateY(${-bottom * (1 - progress)}px)`,
+            left: `translateX(${-right * (1 - progress)}px)`,
+            bottom: `translateY(${(windowDimensions.height - top) * (1 - progress)}px)`,
+            right: `translateX(${(windowDimensions.width - left) * (1 - progress)}px)`
+          };
+          element.style.transform = transforms[direction] || ''
+
           break;
         }
       }
