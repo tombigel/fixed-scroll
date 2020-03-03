@@ -153,7 +153,7 @@ class ScrubEffects {
           const transforms = {
             top: `translateY(${-bottom * (1 - progress)}px)`,
             left: `translateX(${-right * (1 - progress)}px)`,
-            bottom: `translateY(${(windowDimensions.height - top - windowDimensions.y) * (1 - progress)}px)`,
+            bottom: `translateY(${(windowDimensions.height - (top - windowDimensions.y)) * (1 - progress)}px)`,
             right: `translateX(${(windowDimensions.width - left) * (1 - progress)}px)`
           };
           element.style.transform = transforms[direction] || '';
