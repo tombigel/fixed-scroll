@@ -58,10 +58,8 @@ class ScrubAnimations {
   init() {
     const windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
     this.elementsWithEffectsMap = this.getElementsWithEffects();
-    if (!isMobile()) {
-      this.initDocument();
-      this.doScroll(windowScrollAndSize);
-    }
+    this.initDocument();
+    this.doScroll(windowScrollAndSize);
     this.doOnNextRAF();
   }
 
@@ -106,9 +104,7 @@ class ScrubAnimations {
         // see this gist by Paul Irish: https://gist.github.com/paulirish/5d52fb081b3570c81e3a
         const windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
         // Scroll...
-        if (!isMobile()) {
-          this.doScroll(windowScrollAndSize);
-        }
+        this.doScroll(windowScrollAndSize);
         // ...then animate
         this.doAnimations(windowScrollAndSize);
         // Release debounce flag
