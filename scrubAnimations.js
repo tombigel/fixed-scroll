@@ -31,7 +31,7 @@ import { onReady, getWindowSize, getWindowScroll } from './utils.js';
 class ScrubAnimations {
   constructor(root) {
     // Flag to know if animation already requested
-    this.waitingForNextAF = false;
+    this.nextFrameCallbackId = undefined;
     // Store for elements that should animate
     this.elementsWithEffectsMap = [];
     // The animation root scrollable component
@@ -75,7 +75,7 @@ class ScrubAnimations {
 
   /**
    * Collect animatable elements
-   * Using data-* for annotations:
+   * - measure the elements while ignoring transformations
    * - data-effect is the effect name "doAnimations()" should handle
    * - data-* are animation parameters to expose
    * @returns {Map<HTMLElement, ElementAnimationParameters>}
@@ -97,9 +97,8 @@ class ScrubAnimations {
    * Throttle and debounce scroll and animations to next animation frame
    */
   doOnNextRAF() {
-    if (!this.waitingForNextAF) {
-      this.waitingForNextAF = true;
-      requestAnimationFrame(() => {
+    if (!this.nextFrameCallbackId) {
+      this.nextFrameCallbackId = requestAnimationFrame(() => {
         // Remeasure scroll and size closer to animation
         // Will cause layout thrashing, but I think it is the right place for it
         // see this gist by Paul Irish: https://gist.github.com/paulirish/5d52fb081b3570c81e3a
@@ -109,7 +108,7 @@ class ScrubAnimations {
         // ...then animate
         this.doAnimations(windowScrollAndSize);
         // Release debounce flag
-        this.waitingForNextAF = false;
+        this.nextFrameCallbackId = undefined;
       });
     }
   }
@@ -119,19 +118,46 @@ class ScrubAnimations {
    * Supported effects:
    * - parallax: will apply a parallax effect on the first child of an element (speed 0..1)
    * - screen-in: TBD
-   * @param {WindowDimensions} params
+   * @param {WindowDimensions} windowDimensions
    */
-  doAnimations({ x, y, width, height }) {
+  doAnimations(windowDimensions) {
     this.elementsWithEffectsMap.forEach((params, element) => {
       switch (params.effect) {
+        /**
+         * 'parallax':
+         * bg - the first child of a strip
+         * top - the element top
+         * speed - a number between 1 to 0 to indicate parallax speed, where 0 is static and 1 is fixed
+         */
         case 'parallax': {
           const bg = element.firstElementChild;
           const { top, speed } = params;
-          const distance = (y - top) * speed;
+          const distance = (windowDimensions.y - top) * speed;
           bg.style.transform = `translateY(${distance}px)`;
+          break;
         }
+        /**
+         * 'slide-in':
+         * direction - slide from [top, left, bottom, right]
+         * top - the element top
+         * left - the element left
+         * bottom - the element bottom
+         * right - the element right
+         * threshold - a number between 1 to 0 to indicate where in the viewport the element should be back in its place, where 0 is bottom and 1 is top
+         */
         case 'slide-in': {
-          const { direction, threshold } = params;
+          const { top, left, bottom, right, direction, threshold } = params;
+          switch (direction) {
+            case 'right': {
+              const distance = windowDimensions.width - right; // distance to travel
+              const end = windowDimensions.height * threshold; // the y position where element should be with translateX(0)
+              const current = windowDimensions.y + windowDimensions.height- top; // the current y position of the element
+              const progress = Math.min(current / end, 1) // the percent of the animation we should be in, normalized
+              element.style.transform = `translateX(${distance * (1 - progress)}px)`;
+              break;
+            }
+          }
+          break;
         }
       }
     });
@@ -144,8 +170,6 @@ class ScrubAnimations {
   doScroll({ x, y }) {
     this.root.scrollTop = y;
     this.root.scrollLeft = x;
-    //root.style.top = `-${y}px`
-    //root.style.transform = `translateY(-${y}px)`;
   }
 }
 window.animation = new ScrubAnimations(document.getElementById('root'));
