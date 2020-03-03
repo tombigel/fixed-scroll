@@ -65,11 +65,14 @@ class ScrubAnimations {
     this.doOnNextRAF();
   }
 
+  /**
+   * Set body height and make root fixed
+   */
   initDocument() {
     // Set body height
     document.body.style.height = this.root.scrollHeight
     // Add scroll class to root
-    this.root.classList.set('scrub-root')
+    this.root.classList.add('scrub-root')
   }
 
   /**
