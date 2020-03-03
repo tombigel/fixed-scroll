@@ -47,9 +47,10 @@
 }
 
 .cube {
+  position: relative;
   width: 100px;
   height: 100px;
-  place-self: center;
+  left: calc(50% - 50px);
 }
 #cube1{
   background: red;
