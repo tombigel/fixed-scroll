@@ -56,7 +56,7 @@ class ScrubAnimations {
    * - Call animations for initial viewport
    */
   init() {
-    windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
+    const windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
     this.elementsWithEffectsMap = this.getElementsWithEffects();
     this.initDocument();
     this.doScroll(windowScrollAndSize);
@@ -103,10 +103,7 @@ class ScrubAnimations {
         // Remeasure scroll and size closer to animation
         // Will cause layout thrashing, but I think it is the right place for it
         // see this gist by Paul Irish: https://gist.github.com/paulirish/5d52fb081b3570c81e3a
-        const windowScrollAndSize = {
-          ...getWindowSize(),
-          ...getWindowScroll()
-        };
+        const windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
         // Scroll...
         this.doScroll(windowScrollAndSize);
         // ...then animate
