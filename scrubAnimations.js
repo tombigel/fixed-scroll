@@ -28,7 +28,7 @@ import { onReady, getWindowSize, getWindowScroll, isMobile } from './utils.js';
  * Manage page animations and throttle scroll
  * @param {HTMLElement} root The fixed element to use as a scroll parent
  */
-class ScrubAnimations {
+class ScrubEffects {
   constructor(root) {
     // Flag to know if animation already requested
     this.nextFrameCallbackId = undefined;
@@ -40,7 +40,7 @@ class ScrubAnimations {
     // Wait for document ready
     onReady(() => {
       // On scroll do all the things
-      window.addEventListener('scroll', () => this.doOnNextRAF());
+      window.addEventListener('scroll', () => this.registerNextAF());
       // On resize init again
       window.addEventListener('resize', () => this.init());
       // Calculate and initialize scroll position
@@ -59,8 +59,8 @@ class ScrubAnimations {
     const windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
     this.elementsWithEffectsMap = this.getElementsWithEffects();
     this.initDocument();
-    this.doScroll(windowScrollAndSize);
-    this.doOnNextRAF();
+    this.propagateScroll(windowScrollAndSize);
+    this.registerNextAF();
   }
 
   /**
@@ -96,7 +96,7 @@ class ScrubAnimations {
   /**
    * Throttle and debounce scroll and animations to next animation frame
    */
-  doOnNextRAF() {
+  registerNextAF() {
     if (!this.nextFrameCallbackId) {
       this.nextFrameCallbackId = requestAnimationFrame(() => {
         // Remeasure scroll and size closer to animation
@@ -104,9 +104,9 @@ class ScrubAnimations {
         // see this gist by Paul Irish: https://gist.github.com/paulirish/5d52fb081b3570c81e3a
         const windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
         // Scroll...
-        this.doScroll(windowScrollAndSize);
+        this.propagateScroll(windowScrollAndSize);
         // ...then animate
-        this.doAnimations(windowScrollAndSize);
+        this.applyEffects(windowScrollAndSize);
         // Release debounce flag
         this.nextFrameCallbackId = undefined;
       });
@@ -120,7 +120,7 @@ class ScrubAnimations {
    * - screen-in: TBD
    * @param {WindowDimensions} windowDimensions
    */
-  doAnimations(windowDimensions) {
+  applyEffects(windowDimensions) {
     this.elementsWithEffectsMap.forEach((params, element) => {
       switch (params.effect) {
         /**
@@ -167,9 +167,9 @@ class ScrubAnimations {
    * Pass scroll position to root element
    * @param {WindowDimensions} params
    */
-  doScroll({ x, y }) {
+  propagateScroll({ x, y }) {
     this.root.scrollTop = y;
     this.root.scrollLeft = x;
   }
 }
-window.animation = new ScrubAnimations(document.getElementById('root'));
+window.scrubEffects = new ScrubEffects(document.getElementById('root'));
