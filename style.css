@@ -2,20 +2,11 @@
   --strip-height: 100vh;
 }
 
-body {
-  height: calc(var(--strip-height) * 5 + 100px);
-}
-
-#root {
+.scrub-root {
   position: fixed;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-}
-
-#inner {
-  position: relative;
-  top: 0;
 }
 
 .strip {
@@ -48,7 +39,7 @@ body {
   background: rgba(255, 255, 255, 0.5);
 }
 .footer {
-  height: 100px;
+  height: auto;
 }
 .cube {
   width: 100px;

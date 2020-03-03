@@ -43,12 +43,8 @@ class ScrubAnimations {
     onReady(() => {
       // On scroll do all the things
       window.addEventListener("scroll", () => this.doOnNextRAF());
-      // On resize measure window again
-      window.addEventListener("resize", () => {
-        this.windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
-        this.elementsWithEffectsMap = this.getElementsWithEffects();
-        this.doOnNextRAF();
-      });
+      // On resize init again
+      window.addEventListener("resize", () => this.init());
       // Calculate and initialize scroll position
       this.init();
     });
@@ -64,8 +60,16 @@ class ScrubAnimations {
   init() {
     this.windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
     this.elementsWithEffectsMap = this.getElementsWithEffects();
+    this.initDocument()
     this.doScroll(this.windowScrollAndSize);
     this.doOnNextRAF();
+  }
+
+  initDocument() {
+    // Set body height
+    document.body.style.height = this.root.scrollHeight
+    // Add scroll class to root
+    this.root.classList.set('scrub-root')
   }
 
   /**
