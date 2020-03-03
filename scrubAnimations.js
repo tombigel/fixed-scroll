@@ -156,8 +156,7 @@ class ScrubEffects {
             bottom: `translateY(${(windowDimensions.height - top) * (1 - progress)}px)`,
             right: `translateX(${(windowDimensions.width - left) * (1 - progress)}px)`
           };
-          element.style.transform = transforms[direction] || ''
-
+          element.style.transform = transforms[direction] || '';
           break;
         }
       }

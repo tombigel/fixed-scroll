@@ -49,6 +49,7 @@
 .cube {
   width: 100px;
   height: 100px;
+  place-self: center;
 }
 #cube1{
   background: red;
