@@ -32,8 +32,6 @@ class ScrubAnimations {
   constructor(root) {
     // Flag to know if animation already requested
     this.waitingForNextAF = false;
-    // Store for window dimensions and scroll
-    this.windowScrollAndSize = {};
     // Store for elements that should animate
     this.elementsWithEffectsMap = [];
     // The animation root scrollable component
@@ -58,10 +56,10 @@ class ScrubAnimations {
    * - Call animations for initial viewport
    */
   init() {
-    this.windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
+    windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
     this.elementsWithEffectsMap = this.getElementsWithEffects();
     this.initDocument();
-    this.doScroll(this.windowScrollAndSize);
+    this.doScroll(windowScrollAndSize);
     this.doOnNextRAF();
   }
 
@@ -101,16 +99,18 @@ class ScrubAnimations {
   doOnNextRAF() {
     if (!this.waitingForNextAF) {
       this.waitingForNextAF = true;
-      // Remeasure scroll closer to animation
-      this.windowScrollAndSize = {
-        ...this.windowScrollAndSize,
-        ...getWindowScroll()
-      };
       requestAnimationFrame(() => {
+        // Remeasure scroll and size closer to animation
+        // Will cause layout thrashing, but I think it is the right place for it
+        // see this gist by Paul Irish: https://gist.github.com/paulirish/5d52fb081b3570c81e3a
+        const windowScrollAndSize = {
+          ...getWindowSize(),
+          ...getWindowScroll()
+        };
         // Scroll...
-        this.doScroll(this.windowScrollAndSize);
+        this.doScroll(windowScrollAndSize);
         // ...then animate
-        this.doAnimations(this.windowScrollAndSize);
+        this.doAnimations(windowScrollAndSize);
         // Release debounce flag
         this.waitingForNextAF = false;
       });
