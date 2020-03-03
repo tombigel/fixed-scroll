@@ -101,12 +101,12 @@ class ScrubAnimations {
   doOnNextRAF() {
     if (!this.waitingForNextAF) {
       this.waitingForNextAF = true;
+      // Remeasure scroll closer to animation
+      this.windowScrollAndSize = {
+        ...this.windowScrollAndSize,
+        ...getWindowScroll()
+      };
       requestAnimationFrame(() => {
-        // Remeasure scroll closer to animation
-        this.windowScrollAndSize = {
-          ...this.windowScrollAndSize,
-          ...getWindowScroll()
-        };
         // Scroll...
         this.doScroll(this.windowScrollAndSize);
         // ...then animate
@@ -144,7 +144,7 @@ class ScrubAnimations {
    * Pass scroll position to root element
    * @param {WindowDimensions} params
    */
-  doScroll({ x, y, width, height }) {
+  doScroll({ x, y }) {
     this.root.scrollTop = y;
     this.root.scrollLeft = x;
     //root.style.top = `-${y}px`
