@@ -7,9 +7,9 @@
  * @param {function} func
  */
 export function onReady(func) {
-  if (document.readyState === "loading") {
+  if (document.readyState === 'loading') {
     // Loading hasn't finished yet
-    document.addEventListener("DOMContentLoaded", () => func());
+    document.addEventListener('DOMContentLoaded', () => func());
   } else {
     // `DOMContentLoaded` has already fired
     func();

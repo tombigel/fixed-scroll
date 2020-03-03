@@ -1,5 +1,5 @@
-import { getElementRect } from "./domMeasurements.js";
-import { onReady, getWindowSize, getWindowScroll } from "./utils.js";
+import { getElementRect } from './domMeasurements.js';
+import { onReady, getWindowSize, getWindowScroll } from './utils.js';
 
 /**
  * Window dimensions in pixels
@@ -42,9 +42,9 @@ class ScrubAnimations {
     // Wait for document ready
     onReady(() => {
       // On scroll do all the things
-      window.addEventListener("scroll", () => this.doOnNextRAF());
+      window.addEventListener('scroll', () => this.doOnNextRAF());
       // On resize init again
-      window.addEventListener("resize", () => this.init());
+      window.addEventListener('resize', () => this.init());
       // Calculate and initialize scroll position
       this.init();
     });
@@ -72,7 +72,7 @@ class ScrubAnimations {
     // Set body height
     document.body.style.height = `${this.root.scrollHeight}px`;
     // Add scroll class to root
-    this.root.classList.add("scrub-root");
+    this.root.classList.add('scrub-root');
   }
 
   /**
@@ -83,7 +83,7 @@ class ScrubAnimations {
    * @returns {Map<HTMLElement, ElementAnimationParameters>}
    */
   getElementsWithEffects() {
-    const elements = this.root.querySelectorAll("[data-effect]");
+    const elements = this.root.querySelectorAll('[data-effect]');
     const entries = [...elements].map(element => [
       element,
       {
@@ -127,13 +127,13 @@ class ScrubAnimations {
   doAnimations({ x, y, width, height }) {
     this.elementsWithEffectsMap.forEach((params, element) => {
       switch (params.effect) {
-        case "parallax": {
+        case 'parallax': {
           const bg = element.firstElementChild;
           const { top, speed } = params;
           const distance = (y - top) * speed;
           bg.style.transform = `translateY(${distance}px)`;
         }
-        case "slide-in": {
+        case 'slide-in': {
           const { direction, threshold } = params;
         }
       }
@@ -151,4 +151,4 @@ class ScrubAnimations {
     //root.style.transform = `translateY(-${y}px)`;
   }
 }
-window.animation = new ScrubAnimations(document.getElementById("root"));
+window.animation = new ScrubAnimations(document.getElementById('root'));
