@@ -36,7 +36,7 @@ class ScrubAnimations {
     this.windowScrollAndSize = {};
     // Store for elements that should animate
     this.elementsWithEffectsMap = [];
-    // The animation root scollable component
+    // The animation root scrollable component
     this.root = root;
 
     // Wait for document ready
