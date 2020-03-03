@@ -4,20 +4,20 @@
  */
 
  /**
-  * An object containing element dimensions
+  * An object containing element dimensions in pixels
   * @typedef {Object} DomDimensions
-  * @property {number} top
-  * @property {number} left
-  * @property {number} bottom
-  * @property {number} right
-  * @property {number} width
-  * @property {number} height
+  * @property {Number} top
+  * @property {Number} left
+  * @property {Number} bottom
+  * @property {Number} right
+  * @property {Number} width
+  * @property {Number} height
   */
 
  /**
  * Get offset added by borders of an element (from computedStyle)
  * @param {HTMLElement} element The element to measure
- * @returns {{top: number, left: number}}
+ * @returns {{top: Number, left: Number}}
  */
 function getBordersOffset(element) {
     const computedStyle = window.getComputedStyle(element)
@@ -30,14 +30,14 @@ function getBordersOffset(element) {
 /**
  * Does element has overflow (from computedStyle)
  * @param {HTMLElement} element The element to measure
- * @return {boolean}
+ * @return {Boolean}
  */
 const hasOverflow = element => window.getComputedStyle(element).getPropertyValue('overflow') === 'visible'
 
 /**
  * Get filtered children of an element
  * @param {HTMLElement} element The element to measure
- * @param {Array<string>} [tagNames]
+ * @param {String[]} [tagNames]
  */
 const getChildren = (element, tagNames) => Array.from(element.children).filter(child => tagNames ? tagNames.includes(child.tagName.toLowerCase()) : child)
 
@@ -83,7 +83,7 @@ export function getElementRect(element, offsetParent) {
  * Get an element dimensions and position relative to the *window* while ignoring all transforms
  * @param {HTMLElement} element The element to measure
  * @param {HTMLElement} [offsetParent] Optional topmost offset parent to calculate position from, will be ignored if passed an element which is not an offset parent or not a parent.
- * @param {window|HTMLElement} [scrollContainer] Optional alternative element to calculate scroll from. Can also be used to mock window
+ * @param {Window|HTMLElement} [scrollContainer] Optional alternative element to calculate scroll from. Can also be used to mock window
  * @returns {DomDimensions}
  */
 export function getBoundingRect(element, offsetParent, scrollContainer) {
@@ -102,22 +102,16 @@ export function getBoundingRect(element, offsetParent, scrollContainer) {
 }
 
 /**
- * Get an element and all it's children dimensions and position relative to the *document* root while ignoring all transforms
- * @param {HTMLElement} element The element to measure
+ * Recursively get the accumulated bounds of a group of elements and their children
+ * @param {HTMLElement[]} elements The elements to measure
  * @param {HTMLElement} [offsetParent] Optional topmost offset parent to calculate position against, if passed an element which is not an offset parent or not a parent of element will be ignored.
  * @param {HTMLElement} [childTags] Optional element tags to filter by (for example, if you have components that their known root is always a 'div', you can save some recursion loops)
- * @param {Array<HTMLElement>} [elementChildren] (For recursion)
- * @param {DomDimensions} [contentRect] (For recursion)
+ * @param {DomDimensions} [contentRect] The accumulated bounds (For recursion)
  * @returns {DomDimensions}
  */
-function getContentRectRecursive(element, offsetParent, childTags, elementChildren, contentRect) {
-    // If this is the first time we run, calculate this element's bounds
-    contentRect = contentRect || getElementRect(element, offsetParent)
-    // Get all 'div' immediate children if not passed by the function
-    elementChildren = elementChildren || getChildren(element, childTags)
-
-    elementChildren.forEach(child => {
-        const rect = getElementRect(child, offsetParent)
+export function getContentRectRecursive(elements, offsetParent, childTags, contentRect = {top: 0, left: 0, bottom: 0, right: 0, width: 0, height: 0}) {
+    for (const element of elements) {
+        const rect = getElementRect(element, offsetParent)
         // If child has no size, meaning it is hidden, don't calculate it
         if (rect.width > 0 && rect.height > 0) {
             if (rect.left < contentRect.left) {
@@ -134,19 +128,19 @@ function getContentRectRecursive(element, offsetParent, childTags, elementChildr
             }
         }
 
-        const grandChildren = getChildren(child, childTags)
+        const elementChildren = getChildren(element, childTags)
         // if a child has children and it's overflow value is not 'hidden', calculate their sizes too
-        if (grandChildren.length && hasOverflow(child)) {
-            getContentRectRecursive(child, offsetParent, childTags, grandChildren, contentRect)
+        if (elementChildren.length && hasOverflow(element)) {
+            getContentRectRecursive(elementChildren, offsetParent, childTags, contentRect)
         }
-    })
+    }
     contentRect.width = contentRect.right - contentRect.left
     contentRect.height = contentRect.bottom - contentRect.top
 
     return contentRect
 }
+
 /**
- /**
  * Get an element and all it's children dimensions and position relative to the *document* root while ignoring all transforms
  * @param {HTMLElement} element The element to measure
  * @param {HTMLElement} [offsetParent] Optional topmost offset parent to calculate position against, if passed an element which is not an offset parent or not a parent of element will be ignored.
@@ -154,7 +148,11 @@ function getContentRectRecursive(element, offsetParent, childTags, elementChildr
  * @returns {DomDimensions}
  */
 export function getContentRect(element, offsetParent, childTags) {
-    return getContentRectRecursive(element, offsetParent, childTags)
+    // Calculate this element's bounds
+    contentRect = getElementRect(element, offsetParent)
+    // Get all immediate children
+    elements = getChildren(element, childTags)
+    return getContentRectRecursive(elements, offsetParent, childTags, contentRect)
 }
 
 /**
@@ -162,7 +160,7 @@ export function getContentRect(element, offsetParent, childTags) {
  * @param {HTMLElement} element The element to measure
  * @param {HTMLElement} [offsetParent] the topmost offset parent to calculate position against, if passed an element which is not an offset parent or not a parent of element will be ignored.
  * @param {HTMLElement} [childTags] element tags to get, defaults to ['div'] tags
- * @param {window|HTMLElement} [scrollContainer] optional alternative element to calculate scroll from. Can also be used to mock window
+ * @param {Window|HTMLElement} [scrollContainer] optional alternative element to calculate scroll from. Can also be used to mock window
  * @returns {DomDimensions}
  */
 export function getBoundingContentRect(element, offsetParent, childTags, scrollContainer) {

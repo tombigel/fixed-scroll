@@ -2,23 +2,26 @@ import { getElementRect } from "./domMeasurements.js";
 import { onReady, getWindowSize, getWindowScroll } from "./utils.js";
 
 /**
+ * Window dimensions in pixels
  * @typedef {Object} WindowDimensions
- * @property {number} x
- * @property {number} y
- * @property {number} width
- * @property {number} height
+ * @property {Number} x scrollX
+ * @property {Number} y scrollY
+ * @property {Number} width
+ * @property {Number} height
  */
 
 /**
+ * Parameters of element animations.
+ * @mixes DomDimensions
  * @typedef {Object} ElementAnimationParameters
- * @property {number} top
- * @property {number} left
- * @property {number} bottom
- * @property {number} right
- * @property {number} width
- * @property {number} height
- * @property {string} effect
- * @property {string} [*]
+ * @property {Number} top
+ * @property {Number} left
+ * @property {Number} bottom
+ * @property {Number} right
+ * @property {Number} width
+ * @property {Number} height
+ * @property {String} effect
+ * @property {String} [*]
  */
 
 /**
