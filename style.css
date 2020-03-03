@@ -3,7 +3,7 @@
 }
 
 body {
-  height: calc(var(--strip-height) * 5);
+  height: calc(var(--strip-height) * 5 + 100px);
 }
 
 #root {
@@ -48,7 +48,7 @@ body {
   background: rgba(255, 255, 255, 0.5);
 }
 .footer {
-  height: auto;
+  height: 100px;
 }
 .cube {
   width: 100px;
