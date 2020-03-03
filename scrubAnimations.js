@@ -60,7 +60,7 @@ class ScrubAnimations {
   init() {
     this.windowScrollAndSize = { ...getWindowSize(), ...getWindowScroll() };
     this.elementsWithEffectsMap = this.getElementsWithEffects();
-    this.initDocument()
+    this.initDocument();
     this.doScroll(this.windowScrollAndSize);
     this.doOnNextRAF();
   }
@@ -70,9 +70,9 @@ class ScrubAnimations {
    */
   initDocument() {
     // Set body height
-    document.body.style.height = this.root.scrollHeight
+    document.body.style.height = `${this.root.scrollHeight}px`;
     // Add scroll class to root
-    this.root.classList.add('scrub-root')
+    this.root.classList.add("scrub-root");
   }
 
   /**
