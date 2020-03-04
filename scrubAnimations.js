@@ -148,8 +148,8 @@ class ScrubEffects {
         case 'slide-in': {
           const { top, left, bottom, right, direction, threshold } = params;
           const end = windowDimensions.height * threshold; // the y position where element should be with translateX(0)
-          const current = windowDimensions.y + windowDimensions.height- top; // the current y position of the element
-          const progress = Math.min(current / end, 1) // the percent of the animation we should be in, normalized
+          const current = windowDimensions.y + windowDimensions.height - top; // the current y position of the element
+          const progress = Math.max(Math.min(current / end, 1), 0) // the percent of the animation we should be in, normalized
           const transforms = {
             top: `translateY(${-bottom * (1 - progress)}px)`,
             left: `translateX(${-right * (1 - progress)}px)`,
