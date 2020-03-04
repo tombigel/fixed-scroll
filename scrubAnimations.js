@@ -125,15 +125,18 @@ class ScrubEffects {
       switch (params.effect) {
         /**
          * 'parallax':
-         * bg - the first child of a strip
+         * bg - the first child of a strip which its children are animated
          * top - the element top
          * speed - a number between 1 to 0 to indicate parallax speed, where 0 is static and 1 is fixed
          */
         case 'parallax': {
           const bg = element.firstElementChild;
+          const children = bg && bg.children || [];
           const { top, speed } = params;
           const distance = (windowDimensions.y - top) * speed;
-          bg.style.transform = `translateY(${distance}px)`;
+          for (const child of children) {
+            child.style.transform = `translateY(${distance}px)`;
+          }
           break;
         }
         /**
