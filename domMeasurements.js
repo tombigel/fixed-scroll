@@ -90,9 +90,7 @@ export function getElementRect(element, offsetParent) {
  * @param {Window|HTMLElement} [scrollContainer] Optional alternative element to calculate scroll from. Can also be used to mock window
  * @returns {DomDimensions}
  */
-export function getBoundingRect(element, offsetParent, scrollContainer) {
-  scrollContainer =
-    scrollContainer || (typeof window !== 'undefined' && window);
+export function getBoundingRect(element, offsetParent, scrollContainer = window) {
   const elementRect = getElementRect(element, offsetParent);
   if (scrollContainer) {
     const scrollY = scrollContainer.scrollY || scrollContainer.scrollTop || 0;
@@ -114,12 +112,7 @@ export function getBoundingRect(element, offsetParent, scrollContainer) {
  * @param {DomDimensions} [contentRect] The accumulated bounds (For recursion)
  * @returns {DomDimensions}
  */
-export function getContentRectRecursive(
-  elements,
-  offsetParent,
-  childTags,
-  contentRect = { top: 0, left: 0, bottom: 0, right: 0, width: 0, height: 0 }
-) {
+export function getContentRectRecursive(elements, offsetParent, childTags, contentRect = {top: 0, left: 0, bottom: 0, right: 0}) {
   for (const element of elements) {
     const rect = getElementRect(element, offsetParent);
     // If child has no size, meaning it is hidden, don't calculate it
@@ -141,12 +134,7 @@ export function getContentRectRecursive(
     const elementChildren = getChildren(element, childTags);
     // if a child has children and it's overflow value is not 'hidden', calculate their sizes too
     if (elementChildren.length && hasOverflow(element)) {
-      getContentRectRecursive(
-        elementChildren,
-        offsetParent,
-        childTags,
-        contentRect
-      );
+      getContentRectRecursive(elementChildren, offsetParent, childTags, contentRect);
     }
   }
   contentRect.width = contentRect.right - contentRect.left;
@@ -167,12 +155,7 @@ export function getContentRect(element, offsetParent, childTags) {
   contentRect = getElementRect(element, offsetParent);
   // Get all immediate children
   elements = getChildren(element, childTags);
-  return getContentRectRecursive(
-    elements,
-    offsetParent,
-    childTags,
-    contentRect
-  );
+  return getContentRectRecursive(elements, offsetParent, childTags, contentRect);
 }
 
 /**
@@ -183,20 +166,11 @@ export function getContentRect(element, offsetParent, childTags) {
  * @param {Window|HTMLElement} [scrollContainer] optional alternative element to calculate scroll from. Can also be used to mock window
  * @returns {DomDimensions}
  */
-export function getBoundingContentRect(
-  element,
-  offsetParent,
-  childTags,
-  scrollContainer
-) {
-  scrollContainer =
-    scrollContainer || (typeof window !== 'undefined' && window);
+export function getBoundingContentRect(element, offsetParent, childTags, scrollContainer = window) {
   const elementRect = getContentRect(element, offsetParent, childTags);
   if (scrollContainer) {
-    const scrollY =
-      scrollContainer.pageYOffset || scrollContainer.scrollTop || 0;
-    const scrollX =
-      scrollContainer.pageXOffset || scrollContainer.scrollLeft || 0;
+    const scrollY = scrollContainer.pageYOffset || scrollContainer.scrollTop || 0;
+    const scrollX = scrollContainer.pageXOffset || scrollContainer.scrollLeft || 0;
 
     elementRect.top -= scrollY;
     elementRect.bottom -= scrollY;
