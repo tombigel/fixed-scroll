@@ -50,11 +50,13 @@
   height: auto;
 }
 
+.horizontal {display: flex; flex-flow: row wrap; justify-content: center}
+.vertical {display: flex; flex-direction: column;}
+
 .cube {
   position: relative;
   width: 100px;
   height: 100px;
-  left: calc(50% - 50px);
 }
 #cube1{
   background: red;

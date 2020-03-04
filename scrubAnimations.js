@@ -173,6 +173,11 @@ class ScrubEffects {
   propagateScroll({ x, y }) {
     this.root.scrollTop = y;
     this.root.scrollLeft = x;
+
+    // this.root.style.top = `${-y}px`;
+    // this.root.style.left = `${-x}px`;
+
+    //this.root.style.transform = `translateY(${-y}px) translateX(${-x}px)`;
   }
 }
 window.scrubEffects = new ScrubEffects(document.getElementById('root'));
