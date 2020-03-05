@@ -1,12 +1,17 @@
 :root {
   --strip-height: 1000px;
 }
-
+body {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+}
 .scrub-root {
   position: fixed;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
 }
 
 .strip {
