@@ -45,6 +45,12 @@ export function isMobile() {
   return /Mobi|Android/i.test(navigator.userAgent)
 }
 
+/**
+ * Check if an a set of dimensions is in the window bounds
+ * @param {DomDimensions} boundingRect
+ * @param {WindowDimensions} windowDimensions
+ * @returns
+ */
 export function isInViewport({top, left, bottom, right}, {width, height, x, y}) {
   const vertical = (top - y) >= 0 && (top - y) <= height || (bottom - y) >= 0 && (bottom - y) <= height;
   const horizontal = (left - x) >= 0 && (left - x) <= width || (right - x) >= 0 && (right - x) <= width;
