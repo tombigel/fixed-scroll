@@ -1,5 +1,5 @@
 import { getElementRect } from './domMeasurements.js';
-import { onReady, getWindowSize, getWindowScroll, isMobile } from './utils.js';
+import { onReady, getWindowSize, getWindowScroll, isInViewport } from './utils.js';
 
 /**
  * Window dimensions in pixels
@@ -85,6 +85,7 @@ class ScrubEffects {
     const entries = [...elements].map(element => [
       element,
       {
+        inViewport: false,
         ...getElementRect(element, this.root),
         ...element.dataset
       }
@@ -121,14 +122,24 @@ class ScrubEffects {
    * @param {WindowDimensions} windowDimensions
    */
   applyEffects(windowDimensions) {
-    this.elementsWithEffectsMap.forEach((params, element) => {
+    for (const [element, params] of this.elementsWithEffectsMap) {
+      // Handle viewport:
+      // 1. get if the element is in viewport.
+      // 2. if it is not in viewport now, and wasn't in viewport the last time, skip.
+      //    We do this to avoid frame skips and miss the last animation in the viewport.
+      // 3. save viewport state.
+      const inViewport = isInViewport(params, windowDimensions);
+      if (!params.inViewport && !inViewport) {
+        continue;
+      }
+      params.inViewport = inViewport;
+
       switch (params.effect) {
-        /**
-         * 'parallax':
-         * bg - the first child of a strip which its children are animated
-         * top - the element top
-         * speed - a number between 1 to 0 to indicate parallax speed, where 0 is static and 1 is fixed
-         */
+        // 'parallax':
+        // -----------
+        //  bg - the first child of a strip which its children are animated
+        //  top - the element top
+        //  speed - a number between 1 to 0 to indicate parallax speed, where 0 is static and 1 is fixed
         case 'parallax': {
           const bg = element.firstElementChild;
           const children = bg && bg.children || [];
@@ -139,15 +150,14 @@ class ScrubEffects {
           }
           break;
         }
-        /**
-         * 'slide-in':
-         * direction - slide from [top, left, bottom, right]
-         * top - the element top
-         * left - the element left
-         * bottom - the element bottom
-         * right - the element right
-         * threshold - a number between 1 to 0 to indicate where in the viewport the element should be back in its place, where 0 is bottom and 1 is top
-         */
+        // 'slide-in':
+        // -----------
+        // direction - slide from [top, left, bottom, right]
+        // top - the element top
+        // left - the element left
+        // bottom - the element bottom
+        // right - the element right
+        // threshold - a number between 1 to 0 to indicate where in the viewport the element should be back in its place, where 0 is bottom and 1 is top
         case 'slide-in': {
           const { top, left, bottom, right, direction, threshold } = params;
           const end = windowDimensions.height * threshold; // the y position where element should be with translateX(0)
@@ -163,7 +173,7 @@ class ScrubEffects {
           break;
         }
       }
-    });
+    };
   }
 
   /**

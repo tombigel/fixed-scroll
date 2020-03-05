@@ -44,3 +44,9 @@ export function getWindowScroll() {
 export function isMobile() {
   return /Mobi|Android/i.test(navigator.userAgent)
 }
+
+export function isInViewport({top, left, bottom, right}, {width, height, x, y}) {
+  const vertical = (top - y) >= 0 && (top - y) <= height || (bottom - y) >= 0 && (bottom - y) <= height;
+  const horizontal = (left - x) >= 0 && (left - x) <= width || (right - x) >= 0 && (right - x) <= width;
+  return vertical && horizontal;
+}
