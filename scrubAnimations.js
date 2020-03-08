@@ -124,10 +124,10 @@ class ScrubEffects {
   applyEffects(windowDimensions) {
     for (const [element, params] of this.elementsWithEffectsMap) {
       // Handle viewport:
-      // 1. get if the element is in viewport.
-      // 2. if it is not in viewport now, and wasn't in viewport the last time, skip.
+      // 1. Is the element in viewport (by saved measures, not dom lookup)?
+      // 2. If it is not in viewport now, and wasn't in viewport the last time we checked, skip.
       //    We do this to avoid frame skips and miss the last animation in the viewport.
-      // 3. save viewport state.
+      // 3. save viewport state for next time.
       const inViewport = isInViewport(params, windowDimensions);
       if (!params.inViewport && !inViewport) {
         continue;
