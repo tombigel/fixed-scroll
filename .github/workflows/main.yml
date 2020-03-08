@@ -1,0 +1,41 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request 
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: JSDoc Action
+      uses: andstor/jsdoc-action@v1.1.0
+      with:
+        # Source directory to build documentation from
+        #source_dir: # optional
+        # Output folder for the generated documentation
+        output_dir: /docs # optional
+        # Recurse into subdirectories when scanning for source files
+        #recurse: # optional
+        # The path to a JSDoc configuration file
+        #config_file: # optional
+        # The name of a JSDoc template to install
+        #template_name: # optional
+        # The relative location of the template files within the template package
+        #template_dir: # optional
+        # The path to a Markdown file to be used as a the front page
+        #front_page: # optional
