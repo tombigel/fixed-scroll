@@ -17,7 +17,7 @@
 /**
  * Get offset added by borders of an element (from computedStyle)
  * @param {HTMLElement} element The element to measure
- * @returns {{top: Number, left: Number}}
+ * @returns {{top: Number, left: Number}} the border offset dimensions
  */
 function getBordersOffset(element) {
   const computedStyle = window.getComputedStyle(element);
@@ -28,7 +28,7 @@ function getBordersOffset(element) {
 }
 
 /**
- * Does element has overflow (from computedStyle)
+ * Does element has overflow (from computedStyle)?
  * @param {HTMLElement} element The element to measure
  * @return {Boolean}
  */
