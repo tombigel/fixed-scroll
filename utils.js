@@ -52,7 +52,7 @@ export function isMobile() {
  * @returns
  */
 export function isInViewport({top, left, bottom, right}, {width, height, x, y}) {
-  const vertical = (top - y) >= 0 && (top - y) <= height || (bottom - y) >= 0 && (bottom - y) <= height;
-  const horizontal = (left - x) >= 0 && (left - x) <= width || (right - x) >= 0 && (right - x) <= width;
+  const vertical = (top - y) >= 0 && (top - y) <= height || (bottom - y) >= 0 && (bottom - y) <= height || (top - y) < 0 && (bottom - y) > height;
+  const horizontal = (left - x) >= 0 && (left - x) <= width || (right - x) >= 0 && (right - x) <= width || (left - x) < 0 && (right - x) > width;
   return vertical && horizontal;
 }
