@@ -118,7 +118,7 @@ class ScrubEffects {
    * Logic to execute animations.
    * Supported effects:
    * - parallax: will apply a parallax effect on the first child of an element (speed 0..1)
-   * - screen-in: TBD
+   * - slide-in: slide an element into the screen (direction 'top'|'left'|'bottom'|'right', threshold 0..1)
    * @param {WindowDimensions} windowDimensions
    */
   applyEffects(windowDimensions) {
